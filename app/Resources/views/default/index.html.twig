@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Orders</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-xs-3">{{ form_widget(form.period) }}</div>
+                <div class="col-xs-5">{{ form_widget(form.term) }}</div>
+                <div class="col-xs-2">{{ form_widget(form.searchSubmit) }}</div>
+                <div class="col-xs-2 text-right"><a href="{{ path('add') }}" class="btn btn-success">Add new order</a></div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Date</th>
+            <th class="text-right">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if pagination|length == 0 %}
+            <tr>
+                <td colspan="7">No orders yet</td>
+            </tr>
+        {% endif %}
+
+        {% for order in pagination %}
+            <tr>
+                <td>{{ order.user.name }}</td>
+                <td>{{ order.product.name }}</td>
+                <td>{{ order.product.price }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ calculateOrderTotal(order) }}</td>
+                <td>{{ order.createdAt|date('d M Y, h:iA') }}</td>
+                <td class="text-right">
+                    <a href="{{ path('edit', {'order': order.id}) }}" class="btn btn-success">Edit</a>
+                    <a href="{{ path('delete', {'order': order.id}) }}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(pagination) }}
+{% endblock %}
