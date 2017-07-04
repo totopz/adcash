@@ -21,7 +21,8 @@ class OrderRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('o')
             ->innerJoin('o.user', 'u')
-            ->innerJoin('o.product', 'p');
+            ->innerJoin('o.product', 'p')
+            ->orderBy('o.id');
 
         if ($period !== null) {
             switch ($period) {
